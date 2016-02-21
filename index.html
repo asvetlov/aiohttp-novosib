@@ -46,10 +46,10 @@
                 <p>
                   <ul>
                     <li>Use Python for more than 15 years</li>
-                    <li class="fragment">Python Core Developer since 2012</li>
-                    <li class="fragment"><i>asyncio</i> co-author</li>
-                    <li class="fragment"><i>aiohttp</i> maintainer</li>
-                    <li class="fragment">provide dozen libraries under <i>aio-libs</i> umbrella</li>
+                    <li>Python Core Developer since 2012</li>
+                    <li><i>asyncio</i> co-author</li>
+                    <li><i>aiohttp</i> maintainer</li>
+                    <li>provide dozen libraries under <i>aio-libs</i> umbrella</li>
                   </ul
                 </p>
               </section>
@@ -205,8 +205,7 @@ async def coro(session):
 async def coro(session):
     with aiohttp.Timeout(1.5):
         async with session.get(url) as r:
-            print(r.status)
-            print(await r.text())
+            ...
                   </code></pre>
                 </section>
                 <section>
@@ -306,8 +305,8 @@ async def handler(request):
 
     async for msg in ws:
         if msg.data == 'close':
-        await ws.close()
-        break
+            await ws.close()
+            break
     else:
         ws.send_str(msg.data + '/answer')
 
