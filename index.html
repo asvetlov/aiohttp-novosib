@@ -15,10 +15,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
         <link rel="stylesheet" href="css/reveal.css">
-        <link rel="stylesheet" href="css/theme/beige.css" id="theme">
+        <link rel="stylesheet" href="css/theme/white.css" id="theme">
 
         <!-- For syntax highlighting -->
-        <link rel="stylesheet" href="lib/css/zenburn.css">
+        <link rel="stylesheet" href="lib/css/custom.css">
 
         <!-- If the query includes 'print-pdf', use the PDF print sheet -->
         <script>
@@ -41,23 +41,334 @@
                 <h2>Andrew Svetlov</h2>
                 <p>andrew.svetlov@gmail.com</p>
               </section>
-              <section data-markdown>
-                <script type="text/template">
-                  ## Bio
-
-                  * Python Core Developer since 2012
-                  * *asyncio* co-author
-                  * *aiohttp* maintainer
-                  * provide dozen libraries under *aio-libs* umbrella
-                </script>
+              <section>
+                <h2>Bio</h2>
+                <p>
+                  <ul>
+                    <li>Use Python for more than 15 years</li>
+                    <li class="fragment">Python Core Developer since 2012</li>
+                    <li class="fragment"><i>asyncio</i> co-author</li>
+                    <li class="fragment"><i>aiohttp</i> maintainer</li>
+                    <li class="fragment">provide dozen libraries under <i>aio-libs</i> umbrella</li>
+                  </ul
+                </p>
               </section>
-              <section data-markdown>
-                <script type="text/template">
-                  ## aiohttp -- asyncio-based web
-
-                  
-                </script>
+              <section>
+                <section>
+                  <h2>Poll 1</h2>
+                  <p>
+                    <ul>
+                      <li>Who use Python 3?</li>
+                      <li class="fragment">Develop WEB sites?</li>
+                      <li class="fragment">Django?</li>
+                      <li class="fragment">Flask?</li>
+                    </ul>
+                  </p>
+                </section>
+                <section>
+                  <h2>Poll 2</h2>
+                  <p>
+                    <ul>
+                      <li>Who use asynchronous frameworks?</li>
+                      <li class="fragment">Twisted?</li>
+                      <li class="fragment">Tornado?</li>
+                      <li class="fragment">eventlib/gevent?</li>
+                      <li class="fragment">asyncio/aiohttp?</li>
+                    </ul>
+                  </p>
+                </section>
               </section>
+              <section>
+                <blockquote>
+                  asyncio is another interesting topic.
+
+                  I was surprised how alive and well that little corner of the Python community is (albeit in mainly Russian speaking countries).
+                </blockquote>
+                <p>Hynek Schlawack</p>
+
+                <aside class="notes">
+                  Don't get me wrong. We are not a sect. Or, at least, we accept non Russian newcomers for free as well.
+
+                  I can describe the situation, it's easy.
+
+                  Guido started.
+
+                  Kim joined.
+
+                  I joined after that.
+
+                  Victor made all dirty work for publishing asyncio
+
+                  Selivanov made async/await syntax
+
+                  And so on.
+
+                  History if aoihttp bearing
+                </aside>
+              </section>
+              <section>
+                <section>
+                  <h2>aiohttp -- asyncio-based web</h2>
+                  <p>
+                    <ul>
+                      <li>Client API</li>
+                      <li>Server</li>
+                      <li>Persistent connections</li>
+                      <li>Websockets</li>
+                    </ul>
+                  </p>
+                </section>
+                <section>
+                  <h2>3 years long history</h2>
+                  <p>
+                    <ul>
+                      <li>Extracted from asyncio (former tulip)</li>
+                      <li>21 releases so far</li>
+                      <li>2800+ commits</li>
+                      <li>100+ contributors</li>
+                    </ul>
+                  </p>
+                </section>
+              </section>
+              <section>
+                <section>
+                  <h1>Client API</h1>
+                </section>
+                <section>
+                  <h2>Requests</h2>
+                  <pre><code>
+import requests
+
+r = requests.get('https://api.github.com/user',
+                 auth=('user', 'pass'))
+print(r.status_code)
+print(r.headers['content-type'])
+print(r.text)
+                  </code></pre>
+                </section>
+                <section>
+                  <h2>aiohttp</h2>
+                  <pre><code>
+import aiohttp
+
+async def coro():
+    r = await aiohttp.get('https://api.github.com/user',
+                          auth=aiohttp.BasicAuth('user', 'pass'))
+    print(r.status)
+    print(r.headers['content-type'])
+    print(await r.text())
+    r.close()
+                  </code></pre>
+                  <aside class="notes">
+                    Please never talk about the slide outside of the room.
+                    Shame on me.
+                  </aside>
+                </section>
+                <section>
+                  <h2>Rule of thumb for coroutines</h2>
+                  <p>
+                    <ol>
+                      <li>Call a coroutine with <b>await</b></li>
+                      <li>If a function has <b>awaits</b> -- make it coroutine</li>
+                    </ol>
+                  </p>
+                  <pre>
+                    <code>
+async def func():
+    await asyncio.sleep(1)
+                    </code>
+                  </pre>
+                </section>
+                <section>
+                  <h2>Requests with session</h2>
+                  <pre><code>
+session = requests.Session()
+
+r = session.get(url)
+                  </code></pre>
+                </section>
+                <section>
+                  <h2>aiohttp with session</h2>
+                  <pre><code>
+session = aiohttp.Session()
+
+async def coro(session):
+    async with session.get(url) as r:
+        print(r.status)
+        print(await r.text())
+                  </code></pre>
+                </section>
+
+                <section>
+                  <h2>Timeouts</h2>
+                  <pre><code>
+async def coro(session):
+    with aiohttp.Timeout(1.5):
+        async with session.get(url) as r:
+            print(r.status)
+            print(await r.text())
+                  </code></pre>
+                </section>
+                <section>
+                  <h2>Websockets</h2>
+                  <pre>
+                    <code>
+async with client.ws_connect(
+    'http://websocket-server.org/endpoint') as ws:
+
+    async for msg in ws:
+        if msg.data == 'close':
+            await ws.close()
+            break
+        else:
+            ws.send_str("Answer on " + msg.data)
+                    </code>
+                  </pre>
+                </section>
+              </section>
+
+              <section>
+                <section>
+                  <h1>Server</h1>
+                </section>
+                <section>
+                  <h2>Trivial aiohttp</h2>
+                  <pre>
+                    <code>
+from aiohttp import web
+
+async def handler(request):
+    return web.Response(text="Hello, world")
+
+app = web.Application(loop=loop)
+app.router.add_route('GET', '/', handler)
+web.run_app(app)
+                    </code>
+                  </pre>
+                </section>
+                <section>
+                  <h2>Tornado</h2>
+                  <pre>
+                    <code>
+import tornado.ioloop
+import tornado.web
+
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write("Hello, world")
+
+app = tornado.web.Application([
+    (r"/", MainHandler)])
+
+app.listen(8888)
+tornado.ioloop.IOLoop.current().start()
+                    </code>
+                  </pre>
+                </section>
+                <section>
+                  <h2>Database init</h2>
+                  <pre>
+                    <code>
+import sqlalchemy as sa
+from aiopg.sa import create_engine
+
+metadata = sa.MetaData()
+tbl = sa.Table('tbl', metadata,
+               sa.Column('id', sa.Integer, primary_key=True),
+               sa.Column('val', sa.String(255)))
+
+app['db'] = await create_engine(...)
+                    </code>
+                  </pre>
+                </section>
+                <section>
+                  <h2>Database usage</h2>
+                  <pre>
+                    <code>
+async def handler(request):
+    txt = ""
+    async with request.app['db'].acquire() as conn:
+        await conn.execute(tbl.insert().values(val='abc'))
+
+        async for row in conn.execute(tbl.select()):
+            txt += "{}: {}\n".format(row.id, row.val)
+    return web.Response(text=txt)
+                    </code>
+                  </pre>
+                </section>
+                <section>
+                  <h2>Serverside websockets</h2>
+                  <pre>
+                    <code>
+async def handler(request):
+    ws = web.WebSocketResponse()
+    await ws.prepare(request)
+
+    async for msg in ws:
+        if msg.data == 'close':
+        await ws.close()
+        break
+    else:
+        ws.send_str(msg.data + '/answer')
+
+    return ws
+                    </code>
+                  </pre>
+                </section>
+              </section>
+              <section>
+                <section>
+                  <h1>Advanced techniques</h1>
+                </section>
+                <section>
+                  <h2>Request lifecicle and middlewares</h2>
+                  <img src="middleware.png"/>
+                </section>
+                <section>
+                  <h2>Server-side sessions</h2>
+                  <pre>
+                    <code>
+from aiohttp_session import get_session
+
+async def hander(request):
+    session = await get_session(request)
+    session['key'] = 'value'
+    return web.Response()
+                    </code>
+                  </pre>
+                </section>
+                <section>
+                  <h2>Debug Toolbar</h2>
+                  <img src="debugtoolbar.jpg"/>
+                </section>
+              </section>
+              <section>
+                <section>
+                  <h1>aiohttp benefits</h1>
+                </section>
+                <section>
+                  <h2>external resource</h2>
+                  <img src="multisites.png"/>
+                  <p class="fragment">Very cheap!</p>
+                </section>
+                <section>
+                  <h2>Development cycle</h2>
+                  <p>
+                    <ul>
+                      <li>Use single process for dev environment</li>
+                      <li>Make test run easy</li>
+                      <li>Deploy independently in separate
+                        processes/containers/nodes</li>
+                    </ul>
+                  </p>
+                </section>
+              </section>
+              <section>
+                <h1>Questions?</h1>
+                <br>
+                <h2>Andrew Svetlov</h2>
+                <p>andrew.svetlov@gmail.com</p>
+                <p>@andrew_svetlov</p>
             </div>
 
         </div>
