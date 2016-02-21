@@ -348,7 +348,7 @@ async def hander(request):
               </section>
               <section>
                 <section>
-                  <h1>aiohttp benefits</h1>
+                  <h1>tips and tricks</h1>
                 </section>
                 <section>
                   <h2>external resource</h2>
@@ -365,6 +365,82 @@ async def hander(request):
                         processes/containers/nodes</li>
                     </ul>
                   </p>
+                </section>
+                <section>
+                  <h2>PYTHONASYNCIODEBUG=1</h2>
+                  <pre>
+                    <code>
+async def f():
+    fut = asyncio.Future()
+    fut.set_exception(RuntimeError())
+    del fut
+                    </code>
+                  </pre>
+                  <pre>
+                    <code>
+...
+ERROR:asyncio:Future exception was never retrieved
+future: Future finished exception=RuntimeError()
+RuntimeError
+                    </code>
+                  </pre>
+                </section>
+                <section>
+                  <pre>
+                    <code class="bash">
+$ PYTHONASYNCIODEBUG=x python myapp.py
+                    </code>
+                  </pre>
+                  <pre>
+                    <code>
+ERROR:asyncio:Future exception was never retrieved
+future: Future finished exception=RuntimeError() created at filename.py:10
+source_traceback: Object created at (most recent call last):
+...
+File "filename.py", line 10, in f
+fut = asyncio.Future()
+RuntimeError
+                    </code>
+                  </pre>
+                </section>
+                <section>
+                  <h2>Explicit loop</h2>
+                  <pre>
+                    <code>
+def request(method, url, *, loop=None):
+    ...
+
+loop = asyncio.get_event_loop()
+await request('GET', 'http://python.org', loop=loop)
+                    </code>
+                  </pre>
+                </section>
+                <section>
+                  <h2>Testing</h2>
+                  <pre>
+                    <code>
+class Test(unittest.TestCase):
+
+    def setUp(self):
+        self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(None)
+
+    def tearDown(self):
+        self.loop.close()
+
+    def test_func(self):
+        async def go():
+            self.assertEqual(1, await func(loop=loop))
+
+        self.loop.run_until_complete(go())
+                    </code>
+                  </pre>
+                </section>
+                <section>
+                  <h2>Performance</h2>
+                  <p>Benchmark numbers are equal to Tornado and Twisted</p>
+                  <p>Good enough for highload</p>
+                  <p>Support billions online users etc.</p>
                 </section>
               </section>
               <section>
