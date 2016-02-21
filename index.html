@@ -55,7 +55,9 @@
               </section>
               <section>
                 <section>
-                  <h2>Poll 1</h2>
+                  <h1>Polls</h1>
+                </section>
+                <section>
                   <p>
                     <ul>
                       <li>Who use Python 3?</li>
@@ -66,7 +68,6 @@
                   </p>
                 </section>
                 <section>
-                  <h2>Poll 2</h2>
                   <p>
                     <ul>
                       <li>Who use asynchronous frameworks?</li>
@@ -275,8 +276,12 @@ metadata = sa.MetaData()
 tbl = sa.Table('tbl', metadata,
                sa.Column('id', sa.Integer, primary_key=True),
                sa.Column('val', sa.String(255)))
-
 app['db'] = await create_engine(...)
+
+async def close_db(app):
+    app['db'].close()
+    await app['db'].wait_closed()
+app.on_cleanup.append(close_db)
                     </code>
                   </pre>
                 </section>
@@ -356,7 +361,7 @@ async def hander(request):
                     <ul>
                       <li>Use single process for dev environment</li>
                       <li>Make test run easy</li>
-                      <li>Deploy independently in separate
+                      <li>Deploy separately on different
                         processes/containers/nodes</li>
                     </ul>
                   </p>
