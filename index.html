@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
 
-        <title>Introduction to aiohttp</title>
+        <title>Асинхронные сетевые приложения на Python. Вчера, сегодня и завтра</title>
 
         <meta name="description" content="The intro describes basic programming patterns for both client">
         <meta name="author" content="Andrew Svetlov">
@@ -36,19 +36,20 @@
             <!-- Any section element inside of this container is displayed as a slide -->
             <div class="slides">
               <section>
-                <h1>Introduction to aiohttp</h1>
-                <h2>Andrew Svetlov</h2>
+                <h1>Асинхронные сетевые приложения на Python</h1>
+                <h2>. Вчера, сегодня и завтра</h2>
+                <h2>Андрей Светлов</h2>
                 <p>andrew.svetlov@gmail.com</p>
               </section>
               <section>
-                <h2>Bio</h2>
+                <h2>О себе</h2>
                 <p>
                   <ul>
-                    <li>Use Python for more than 15 years</li>
-                    <li>Python Core Developer since 2012</li>
-                    <li><i>asyncio</i> co-author</li>
-                    <li><i>aiohttp</i> maintainer</li>
-                    <li>provide dozen libraries under <i>aio-libs</i> umbrella</li>
+                    <li>Использую python 15+ лет</li>
+                    <li>Python Core Developer с 2012</li>
+                    <li><i>asyncio</i> соавтор</li>
+                    <li><i>aiohttp</i> главный разработчик</li>
+                    <li>Дюжина библиотек в сообществе<i>aio-libs</i></li>
                   </ul
                 </p>
               </section>
@@ -59,8 +60,8 @@
                 <section>
                   <p>
                     <ul>
-                      <li>Who use Python 3?</li>
-                      <li class="fragment">Develop WEB sites?</li>
+                      <li>Кто использует Python 3?</li>
+                      <li class="fragment">Разрабатывает WEB сайты?</li>
                       <li class="fragment">Django?</li>
                       <li class="fragment">Flask?</li>
                     </ul>
@@ -69,7 +70,7 @@
                 <section>
                   <p>
                     <ul>
-                      <li>Who use asynchronous frameworks?</li>
+                      <li>Кто использует асинхронные frameworks?</li>
                       <li class="fragment">Twisted?</li>
                       <li class="fragment">Tornado?</li>
                       <li class="fragment">eventlib/gevent?</li>
@@ -108,7 +109,7 @@
               </section>
               <section>
                 <section>
-                  <h2>aiohttp -- asyncio-based web</h2>
+                  <h2>aiohttp -- асинхронный web</h2>
                   <p>
                     <ul>
                       <li>Client API</li>
@@ -119,11 +120,11 @@
                   </p>
                 </section>
                 <section>
-                  <h2>3 years long history</h2>
+                  <h2>3 года истории</h2>
                   <p>
                     <ul>
-                      <li>Extracted from asyncio (former tulip)</li>
-                      <li>21 releases so far</li>
+                      <li>Выделилися из asyncio (tulip)</li>
+                      <li>21 releases</li>
                       <li>2800+ commits</li>
                       <li>100+ contributors</li>
                     </ul>
@@ -132,7 +133,7 @@
               </section>
               <section>
                 <section>
-                  <h1>Client API</h1>
+                  <h1>Клиентский API</h1>
                 </section>
                 <section>
                   <h2>Requests</h2>
@@ -165,11 +166,12 @@ async def coro():
                   </aside>
                 </section>
                 <section>
-                  <h2>Rule of thumb for coroutines</h2>
+                  <h2>Правила для asyncio</h2>
                   <p>
                     <ol>
-                      <li>Call a coroutine with <b>await</b></li>
-                      <li>If a function has <b>awaits</b> -- make it coroutine</li>
+                      <li class="fragment">Корутина -- это <b>async def</b></li>
+                      <li class="fragment">Вызывай корутину через <b>await</b></li>
+                      <li class="fragment">Если функция содержит <b>await</b> -- сделай её корутиной</li>
                     </ol>
                   </p>
                   <pre>
@@ -180,7 +182,7 @@ async def func():
                   </pre>
                 </section>
                 <section>
-                  <h2>Requests with session</h2>
+                  <h2>Requests с сессией</h2>
                   <pre><code>
 session = requests.Session()
 
@@ -188,7 +190,7 @@ r = session.get(url)
                   </code></pre>
                 </section>
                 <section>
-                  <h2>aiohttp with session</h2>
+                  <h2>aiohttp с сессией</h2>
                   <pre><code>
 session = aiohttp.Session()
 
@@ -200,7 +202,7 @@ async def coro(session):
                 </section>
 
                 <section>
-                  <h2>Timeouts</h2>
+                  <h2>Таймауты</h2>
                   <pre><code>
 async def coro(session):
     with aiohttp.Timeout(1.5):
@@ -209,7 +211,7 @@ async def coro(session):
                   </code></pre>
                 </section>
                 <section>
-                  <h2>Websockets</h2>
+                  <h2>Веб-сокеты</h2>
                   <pre>
                     <code>
 async with client.ws_connect(
@@ -228,10 +230,10 @@ async with client.ws_connect(
 
               <section>
                 <section>
-                  <h1>Server</h1>
+                  <h1>Сервер</h1>
                 </section>
                 <section>
-                  <h2>Trivial aiohttp</h2>
+                  <h2>Тривиальный aiohttp</h2>
                   <pre>
                     <code>
 from aiohttp import web
@@ -265,7 +267,7 @@ tornado.ioloop.IOLoop.current().start()
                   </pre>
                 </section>
                 <section>
-                  <h2>Database init</h2>
+                  <h2>Подключение БД</h2>
                   <pre>
                     <code>
 import sqlalchemy as sa
@@ -285,7 +287,7 @@ app.on_cleanup.append(close_db)
                   </pre>
                 </section>
                 <section>
-                  <h2>Database usage</h2>
+                  <h2>Запросы в БД</h2>
                   <pre>
                     <code>
 async def handler(request):
@@ -300,7 +302,7 @@ async def handler(request):
                   </pre>
                 </section>
                 <section>
-                  <h2>Serverside websockets</h2>
+                  <h2>Серверные веб-сокеты</h2>
                   <pre>
                     <code>
 async def handler(request):
@@ -321,14 +323,14 @@ async def handler(request):
               </section>
               <section>
                 <section>
-                  <h1>Advanced techniques</h1>
+                  <h1>Нетривиальные штучки</h1>
                 </section>
                 <section>
-                  <h2>Request lifecicle and middlewares</h2>
+                  <h2>Жизненный цикл запроса-ответа и middlewares</h2>
                   <img src="middleware.png"/>
                 </section>
                 <section>
-                  <h2>Server-side sessions</h2>
+                  <h2>Серверные сессии</h2>
                   <pre>
                     <code>
 from aiohttp_session import get_session
@@ -347,21 +349,20 @@ async def hander(request):
               </section>
               <section>
                 <section>
-                  <h1>tips and tricks</h1>
+                  <h1>Советы и хитрости</h1>
                 </section>
                 <section>
-                  <h2>external resource</h2>
+                  <h2>Внешние ресурсы</h2>
                   <img src="multisites.png"/>
-                  <p class="fragment">Very cheap!</p>
+                  <p class="fragment">Очень дешево!</p>
                 </section>
                 <section>
-                  <h2>Development cycle</h2>
+                  <h2>Цикл разработки</h2>
                   <p>
                     <ul>
-                      <li>Use single process for dev environment</li>
-                      <li>Make test run easy</li>
-                      <li>Deploy separately on different
-                        processes/containers/nodes</li>
+                      <li>Для разработки -- один процесс</li>
+                      <li>Удобство запуска тестов</li>
+                      <li>Разворачивать на отдельных процессах-контейнерах-узлах</li>
                     </ul>
                   </p>
                 </section>
@@ -415,7 +416,7 @@ await request('GET', 'http://python.org', loop=loop)
                   </pre>
                 </section>
                 <section>
-                  <h2>Testing</h2>
+                  <h2>Тестирование</h2>
                   <pre>
                     <code>
 class Test(unittest.TestCase):
@@ -436,16 +437,16 @@ class Test(unittest.TestCase):
                   </pre>
                 </section>
                 <section>
-                  <h2>Performance</h2>
-                  <p>Benchmark numbers are equal to Tornado and Twisted</p>
-                  <p>Good enough for highload</p>
-                  <p>Support billions online users etc.</p>
+                  <h2>Производительность</h2>
+                  <p>Как у Tornado или Twisted</p>
+                  <p>Достаточно неплохо для highload</p>
+                  <p>Выдерживает миллионы online пользователей и пр.</p>
                 </section>
               </section>
               <section>
-                <h1>Questions?</h1>
+                <h1>Вопросы?</h1>
                 <br>
-                <h2>Andrew Svetlov</h2>
+                <h2>Андрей Светлов</h2>
                 <p>andrew.svetlov@gmail.com</p>
                 <p>@andrew_svetlov</p>
             </div>
