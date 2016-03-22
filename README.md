@@ -1,7 +1,7 @@
-# aiohttp-pycon-caribbean
-Slides for Caribbean PyCon 2016
+# aiohttp-novosib
+Slides for CodeFest 2016
 
 
-Open http://asvetlov.github.io/aiohttp-pycon-caribbean/
+Open http://asvetlov.github.io/aiohttp-novosib/
 
 
