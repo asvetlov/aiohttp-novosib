@@ -57,8 +57,6 @@
               <section>
                 <section>
                   <h1>Опрос</h1>
-                </section>
-                <section>
                   <p>
                     <ul>
                       <li>Кто использует Python 3?</li>
@@ -190,7 +188,7 @@ r = session.get(url)
                 <section>
                   <h2>aiohttp с сессией</h2>
                   <pre><code>
-session = aiohttp.Session()
+session = aiohttp.ClientSession()
 
 async def coro(session):
     async with session.get(url) as r:
