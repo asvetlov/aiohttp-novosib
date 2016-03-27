@@ -368,12 +368,7 @@ async def hander(request):
                 </section>
                 <section>
                   <h2>Selector</h2>
-                  <p>
-                    <ul>
-                      <li>EVENT_READ</li>
-                      <li>EVENT_WRITE</li>
-                    </ul>
-                  </p>
+                  <p><b>EVENT_READ</b>/<b>EVENT_WRITE</b></p>
                   <p>
                     <ul>
                       <li>register(fd, events, data=None)</li>
@@ -382,18 +377,17 @@ async def hander(request):
                     </ul>
                   </p>
                   <p class="fragment">
-                    select, poll, epoll, kqueue
+                    <b><i>select, poll, epoll, kqueue</i></b>
                   </p>
                 </section>
                 <section>
                   <h2>Event loop</h2>
                   <ul>
-                    <li>run_forever()</li>
                     <li>call_soon(callback, *args)</li>
                     <li>call_later(delay, callback, *args)</li>
                     <li>add_reader(fd, callback, *args)</li>
-                    <li>add_writer(fd, callback, *args)</li>
                     <li>remove_reader(fd)</li>
+                    <li>add_writer(fd, callback, *args)</li>
                     <li>remove_writer(fd)</li>
                   </ul>
                 </section>
@@ -401,15 +395,16 @@ async def hander(request):
                   <h2>Итерация event loop</h2>
                   <pre>
                     <code>
-while True:
-    events = selector.select(timeout)
-    for key, mask in events:
-        if mask & EVENT_READ:
-            key.reader(key.fileobj)
-        if mask & EVENT_WRITE:
-            key.writer(key.fileobj)
-    for handler in ready:
-        handler._run()
+def run_forever():
+    while True:
+        events = selector.select(timeout)
+        for key, mask in events:
+            if mask & EVENT_READ:
+                key.reader(key.fileobj)
+            if mask & EVENT_WRITE:
+                key.writer(key.fileobj)
+        for handler in ready:
+            handler._run()
                     </code>
                   </pre>
                 </section>
@@ -418,7 +413,7 @@ while True:
                   <img src="buffers.png"/>
                 </section>
                 <section>
-                  <h2>Временные таймеры</h2>
+                  <h2>Таймеры</h2>
                   <img src="timeline.png"/>
                 </section>
               </section>
