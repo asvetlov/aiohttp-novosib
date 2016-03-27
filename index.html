@@ -40,6 +40,7 @@
                 <h4><i>Вчера, сегодня, завтра</i></h4>
                 <h2>Андрей Светлов</h2>
                 <p>andrew.svetlov@gmail.com</p>
+                <p>@andrew_svetlov</p>
               </section>
               <section>
                 <h2>О себе</h2>
@@ -47,9 +48,9 @@
                   <ul>
                     <li>Использую python 15+ лет</li>
                     <li>Python Core Developer с 2012</li>
-                    <li><i>asyncio</i> соавтор</li>
-                    <li><i>aiohttp</i> главный разработчик</li>
-                    <li>Дюжина библиотек в сообществе<i>aio-libs</i></li>
+                    <li>Соавтор <i>asyncio</i></li>
+                    <li>Главный разработчик <i>aiohttp</i></li>
+                    <li>Дюжина библиотек в сообществе <i>aio-libs</i></li>
                   </ul
                 </p>
               </section>
@@ -61,22 +62,19 @@
                   <p>
                     <ul>
                       <li>Кто использует Python 3?</li>
-                      <li class="fragment">Разрабатывает WEB сайты?</li>
-                      <li class="fragment">Django?</li>
-                      <li class="fragment">Flask?</li>
+                      <li class="fragment">Разрабатывает WEB сайты на Django/Flask</li>
+                      <li class="fragment">Понимает что такое асинхронное сетевое программирование</li>
+                      <li class="fragment">Использует асинхронные frameworks (twisted/tornado/gevent)?</li>
                     </ul>
                   </p>
                 </section>
                 <section>
-                  <p>
-                    <ul>
-                      <li>Кто использует асинхронные frameworks?</li>
-                      <li class="fragment">Twisted?</li>
-                      <li class="fragment">Tornado?</li>
-                      <li class="fragment">eventlib/gevent?</li>
-                      <li class="fragment">asyncio/aiohttp?</li>
-                    </ul>
-                  </p>
+                  <h2>Зачем?</h2>
+                  <img src="multisites.png"/>
+                  <ul class="fragment">
+                    <li>1,000 потоков OS</li>
+                    <li>1,000,000 легковесных задач</li>
+                  </ul>
                 </section>
               </section>
               <section>
@@ -112,7 +110,7 @@
                   <h2>aiohttp -- асинхронный web</h2>
                   <p>
                     <ul>
-                      <li>Клиетнское API</li>
+                      <li>Клиент</li>
                       <li>Сервер</li>
                       <li>Перманентные соединения</li>
                       <li>Веб-сокеты</li>
@@ -133,7 +131,7 @@
               </section>
               <section>
                 <section>
-                  <h1>Клиентский API</h1>
+                  <h1>Клиент</h1>
                 </section>
                 <section>
                   <h2>Requests</h2>
@@ -231,6 +229,23 @@ async with client.ws_connect(
               <section>
                 <section>
                   <h1>Сервер</h1>
+                </section>
+                <section>
+                  <h2>Django</h2>
+                  <pre>
+                    <code>
+from django.conf.urls import url
+from django.http import HttpResponse
+
+
+def index(request):
+    return HttpResponse("Hello, world")
+
+urlpatterns = [
+    url(r'^$', index),
+]
+                    </code>
+                  </pre>
                 </section>
                 <section>
                   <h2>Тривиальный aiohttp</h2>
@@ -349,12 +364,67 @@ async def hander(request):
               </section>
               <section>
                 <section>
-                  <h1>Советы и хитрости</h1>
+                  <h2>asyncio под капотом</h2>
                 </section>
                 <section>
-                  <h2>Внешние ресурсы</h2>
-                  <img src="multisites.png"/>
-                  <p class="fragment">Очень дешево!</p>
+                  <h2>Selector</h2>
+                  <p>
+                    <ul>
+                      <li>EVENT_READ</li>
+                      <li>EVENT_WRITE</li>
+                    </ul>
+                  </p>
+                  <p>
+                    <ul>
+                      <li>register(fd, events, data=None)</li>
+                      <li>unregister(fd)</li>
+                      <li>select(timeout=None)</li>
+                    </ul>
+                  </p>
+                  <p class="fragment">
+                    select, poll, epoll, kqueue
+                  </p>
+                </section>
+                <section>
+                  <h2>Event loop</h2>
+                  <ul>
+                    <li>run_forever()</li>
+                    <li>call_soon(callback, *args)</li>
+                    <li>call_later(delay, callback, *args)</li>
+                    <li>add_reader(fd, callback, *args)</li>
+                    <li>add_writer(fd, callback, *args)</li>
+                    <li>remove_reader(fd)</li>
+                    <li>remove_writer(fd)</li>
+                  </ul>
+                </section>
+                <section>
+                  <h2>Итерация event loop</h2>
+                  <pre>
+                    <code>
+while True:
+    events = selector.select(timeout)
+    for key, mask in events:
+        if mask & EVENT_READ:
+            key.reader(key.fileobj)
+        if mask & EVENT_WRITE:
+            key.writer(key.fileobj)
+    for handler in ready:
+        handler._run()
+                    </code>
+                  </pre>
+                </section>
+                <section>
+                  <h2>Буферы сокета</h2>
+                  <img src="buffers.png"/>
+                </section>
+                <section>
+                  <h2>Временные таймеры</h2>
+                  <img src="timeline.png"/>
+                </section>
+              </section>
+              <section>
+                <section>
+                  <h1>Советы и хитрости</h1>
                 </section>
                 <section>
                   <h2>Цикл разработки</h2>
